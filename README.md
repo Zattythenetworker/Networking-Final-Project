@@ -81,3 +81,64 @@ I did the SSH configuration for the switches by carrying out the following steps
 6. Accessed the VTY lines (`line vty 0 15`) and set the login method to use the local username/password database (`login local`).
 7. Restricted remote access to SSH only (disabling Telnet) using the `transport input ssh` command on the VTY lines.
 8. Tested the configuration by SSH-ing into the switch from a PC to confirm successful connectivity.
+
+   
+## Router Configuration – Branch Network
+
+Created sub-interfaces on the router for the 3 VLANs and gave each an IP address, which will later be used as the default gateway for the PCs in this network to enable communication.
+<img width="975" height="786" alt="image" src="https://github.com/user-attachments/assets/39c11ee8-44b6-40a5-b41e-653baf655e8b" />
+
+To enable the router to communicate via serial interface, I gave **Serial 1/2/0** an IP address of **192.168.1.194** and turned up (activated) the interface.
+
+## The PCs
+<img width="975" height="543" alt="image" src="https://github.com/user-attachments/assets/6de5cfcd-587c-4ec6-9261-8697cf8f7e16" />
+
+1.  I gave **PC1**, the Admin PC, an IP address of **192.168.1.101** with a subnet mask of **255.255.255.224**.
+2.  I gave **PC2**, for Employees (Dept1), an IP address of **192.168.1.131** with the same subnet mask.
+3.  I gave **PC3**, for Employees (Dept2), an IP address of **192.168.1.162** with the same subnet mask.
+4.  I also set the default gateway on the PCs to the IP of the router; this enables the PCs to ping and communicate.
+
+   ## Pinging the Departments in the Branch Network
+   <img width="975" height="704" alt="image" src="https://github.com/user-attachments/assets/a192d8da-302e-4ba5-a9be-d408c0eea218" />
+
+1. I pinged from PC1 (Admin) to PC2 (Dept1) and PC3 (Dept2) to confirm inter-VLAN communication was successful.
+2. I also pinged from PC2 to PC3 to confirm that Dept1 and Dept2 could communicate with each other.
+3. All pings were successful, confirming that the router's sub-interfaces (Router-on-a-Stick configuration) correctly routed traffic between VLAN 100, VLAN 5, and VLAN 6.
+
+### N/B
+
+Before this was possible, I created VLANs in both switches and made **3 trunk links** to carry multiple VLAN traffic — at the interface leading from Switch 1 to Switch 2, and from Switch 1 to the Router. The sole purpose of this was also to enable the HQ and Branch networks to communicate.
+
+## HQ Network Pinging Branch Network
+<img width="975" height="611" alt="image" src="https://github.com/user-attachments/assets/fbfb5b75-35c2-473f-b3a4-6952673568ac" />
+In this screenshot, I used the HQ Admin PC to ping the Branch Employees Network, as you can see it is pinging successfully.
+
+<img width="975" height="534" alt="image" src="https://github.com/user-attachments/assets/a3403ac1-f747-4321-a9a4-10f09c304801" />
+Here is a screenshot of the Branch Admin PC pinging the HQ Employees Network, as you can see it is pinging successfully.
+
+
+Here shows that I have finally connected both networks together, and they can communicate and share data.
+
+The Admins can also ping themselves, as seen below.
+<img width="975" height="568" alt="image" src="https://github.com/user-attachments/assets/9e5bbe23-661e-4e31-96e0-3d4f1f770508" />
+
+## Screenshot of the Routing Tables
+<img width="975" height="790" alt="image" src="https://github.com/user-attachments/assets/784227f9-ec4d-4387-bcb8-6dd6f112557a" />
+
+  Here is the routing table of the HQ network.
+
+<img width="975" height="741" alt="image" src="https://github.com/user-attachments/assets/1d9b8d97-dbb4-4a58-8c19-6ec862cd0241" />
+
+  Here is the routing table of the Branch network.
+
+
+ Device Credentials and IP Addressing Table.
+
+| # | Device        | Full Hostname        | Console Pass | Enable Pass | SSH User/Pass   | SVI IP        | GW IP          |
+|---|---------------|-----------------------|:------------:|:-----------:|-----------------|---------------|----------------|
+| 1 | SW1_HQ        | Sw1-HQ-Solomon        | 1234         | 2222        | Admin/1234      | 192.168.1.3   | 192.168.1.1    |
+| 2 | SW2_HQ        | Sw2-HQ-Solomon        | 1234         | 2222        | Solo/1212       | 192.168.1.4   | 192.168.1.1    |
+| 3 | Router_HQ     | R1-HQ-Solomon         | 1234         | n/a         | n/a             | N/A           | n/a            |
+| 4 | SW1_Branch    | Sw1-Branch-Solomon    | 1234         | 2222        | Zatty/1144      | 192.168.1.98  | 192.168.1.97   |
+| 5 | SW2_Branch    | Sw2-Branch-solomon    | 1234         | 2222        | Francis/3030    | 192.168.1.99  | 192.168.1.97   |
+| 6 | Router_Branch | R1-Branch-Solomon     | 1234         | n/a         | n/a             | n/a           | n/a            |
