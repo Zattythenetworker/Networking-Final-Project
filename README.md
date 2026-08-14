@@ -23,7 +23,7 @@ This is a logical diagram consisting of the network connectivity, 4 switches, 2 
    - **Fa0/3 – Fa0/4** → VLAN 100
    - **Fa0/5 – Fa0/11** → VLAN 2
    - **Fa0/12 – Fa0/24** → VLAN 3
-5. I also created a hostname for the switch, passwords, a banner message, and Telnet connection.
+5. I also created a hostname for the switch, passwords, a banner message, and ssh connection.
    1. I also created the same VLANs in Switch 2 to enable communication and also assigned ports accordingly.
       <img width="865" height="600" alt="image" src="https://github.com/user-attachments/assets/655e773a-762e-4bab-bef0-bebb3d631b43" />
 2. Gave VLAN 100 an IP address (**192.168.1.2**) with a subnet mask of **255.255.255.244**, all done inside the switch.
